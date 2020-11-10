@@ -95,23 +95,24 @@ public class Planificador extends Thread{
 			if((ejecucion.getPrioridadActual()!=0) && (!TiempoReal.Vacia())) {
 				
 				CambiarEstado(5);//Cambiar el estado del proceso de usuario a 'Expulsado'
-				MostrarProceso();//Mostrar la informacion del proceso en ejecucion
+				MostrarProceso(1);//Mostrar la informacion del proceso en ejecucion
 				
 				expulsado=ejecucion;//Colocar el proceso expulsado en la referencia indicada
 				ejecucion=null;//Liberar la referencia de ejecucion
 				ejecucion=SiguienteProceso();//Obtener el proceso de Tiempo real
 				CambiarEstado(1);//Cambiar el estado del proceso de tiempo real recien obtenido a 'Corriendo'
-				MostrarProceso();//Mostrar la informacion del proceso en ejecucion
+				MostrarProceso(2);//Mostrar la informacion del proceso en ejecucion
 			
 			}else {
-				MostrarProceso();//Mostrar la informacion del proceso en ejecucion
+				CambiarEstado(1);//Cambiar el estado del proceso en ejecucion
+				MostrarProceso(3);//Mostrar la informacion del proceso en ejecucion
 			}
 			
 		}else {
 			//No lo hay
 			ejecucion=SiguienteProceso();//Buscar un proceso para ejecutar
 			CambiarEstado(1);//Cambiar el estado del proceso a 'Corriendo'
-			MostrarProceso();//Mostrar la informacion del proceso en ejecucion
+			MostrarProceso(4);//Mostrar la informacion del proceso en ejecucion
 			
 		}
 	}
@@ -129,7 +130,7 @@ public class Planificador extends Thread{
 			
 				//Se finaliza el Proceso
 				CambiarEstado(4);//Cambiar el estado del proceso a 'Finalizado'
-				MostrarProceso();//Mostrar la informacion del proceso en ejecucion
+				MostrarProceso(5);//Mostrar la informacion del proceso en ejecucion
 				
 				Recursos.LiberarRecursos(ejecucion);//Liberar los recursos que disponia el Proceso
 				TrabajosFinalizados.Escribir(ejecucion);//Mandar a la cola de los procesos ya finalizados
@@ -141,7 +142,7 @@ public class Planificador extends Thread{
 					
 					ejecucion=expulsado;//Pasar el proceso a la referencia de ejecucion
 					CambiarEstado(1);//Cambiar el estado del proceso a 'Corriendo'
-					MostrarProceso();//Mostrar la informacion del proceso en ejecucion
+					MostrarProceso(6);//Mostrar la informacion del proceso en ejecucion
 					
 					expulsado=null;//Vaciar la referencia de expulsado para las siguientes ejecuciones
 				}
@@ -150,18 +151,28 @@ public class Planificador extends Thread{
 				
 			//Si no se completo se verifica si es un Proceso de Usuario
 			}else if(ejecucion.getPrioridadActual()!=0) {
+				
+				int PrioridadProceso=0;
+				
+				
 				//El Proceso es de usuario por lo tanto se degrada
 				CambiarEstado(2);//Se cambia el estado del proceso a 'Listo'
 				DegradarPrioridad(ejecucion);//Se degrada la prioridad del proceso de usuario
-				MostrarProceso();//Mostrar la informacion del proceso en ejecucion
+				PrioridadProceso=ejecucion.getPrioridadActual();
+				MostrarProceso(7);//Mostrar la informacion del proceso en ejecucion
 				
 				ejecucion=null;//Se Libera la referencia del proceso en ejecucion
-				//???
-				ejecucion=SiguienteProceso();
-				MostrarProceso();//Mostrar la informacion del proceso en ejecucion
+				ejecucion=SiguienteProceso();//
+				
+				//
+				if(PrioridadProceso!=ejecucion.getPrioridadActual()) {
+					MostrarProceso(8);//Mostrar la informacion del proceso en ejecucion
+				}
+				
+				
 				
 			}else {
-				MostrarProceso();//Mostrar la informacion del proceso en ejecucion
+				MostrarProceso(9);//Mostrar la informacion del proceso en ejecucion
 			}
 			
 		}
@@ -187,12 +198,15 @@ public class Planificador extends Thread{
 		}
 	}
 	
+	
+	
+	
 	//Mostrar la informacion del proceso
-	public void MostrarProceso() {
+	public void MostrarProceso(int i) {
 		//Si existe un proceso en ejecucion
 		if(ejecucion!=null) {
 			//Imprimir la informacion del proceso
-			System.out.println("\tID Proceso->"+ejecucion.getID()+"|Prioridad->"+ejecucion.getPrioridadActual()+
+			System.out.println("\t<"+i+"> ID Proceso->"+ejecucion.getID()+"|Prioridad->"+ejecucion.getPrioridadActual()+
 					"|Tiempo Restante->"+ejecucion.getTiempoRestante()+"|Tiempo Requerido->"+ejecucion.getTiempoRequerido()+"|Estado:"+
 					((ejecucion.getEstado()==1)?"Corriendo":((ejecucion.getEstado()==2)?"Listo":((ejecucion.getEstado()==3)?"Bloqueado":((ejecucion.getEstado()==4)?"Finalizado":"Suspendido")))));
 		}
