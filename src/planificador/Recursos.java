@@ -9,8 +9,11 @@ import modelo.Proceso;
 public class Recursos {
 
 	//RECURSOS DEL SSOP	
+	//Se inician los vectores con sus campos en -1, debido a que ningún ID puede ser negativo, entonces es una forma de 
+	//iniciarlizarloso vacio 
 	private static int Memoria[]= {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
 	private static int Asignaciones[]= {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
+	
 	private static int MemoriaTiemporeal=64;
 	private static int MemoriaUsuario=960;
 	
@@ -23,7 +26,7 @@ public class Recursos {
 	private static int CD=2;
 	
 	
-	//
+	//Constructor de la clase Recursos
 	public Recursos() {
 		//
 		
@@ -31,7 +34,8 @@ public class Recursos {
 
 		
 	}
-	
+	 
+	//Este metódo agrega los colores en "HEXADECIMAL" a la lista de colores que es un ArrayList 
 	public static void AgregarColor() {
 		colores.add("#F0F8FF"); 
 		colores.add("#FAEBD7");
@@ -72,20 +76,22 @@ public class Recursos {
 	//Asignar los recursos a los procesos de tiempo real y mueve los procesos de usuario a la cola TrabajosUsuario
 	public static void ClasificarColaInicial() {
 			
-		boolean leer=true;
+		boolean leer=true; //Bandera booleana
 			
-		Planificador.ColaInicial.setRecorrer();
+		Planificador.ColaInicial.setRecorrer(); //Se establece el recorrido el puntero en el inicio de la cola
 			
-		while((!Planificador.ColaInicial.Vacia()) && (leer)) {
+		while((!Planificador.ColaInicial.Vacia()) && (leer)) { // Mientras la cola no este vacia el ciclo se ejecutara 
+			//y mientras la bandera sea True
 				
-			Proceso proceso=null;
+			Proceso proceso=null; 
 				
-			if((proceso=Planificador.ColaInicial.obtenerProceso())!=null) {
+			if((proceso=Planificador.ColaInicial.obtenerProceso())!=null) {  //Sacamos el proceso de la cola para realizar 
+				//las distintas operaciones
 					
 					
-				if(proceso.getPrioridadActual()==0) {
+				if(proceso.getPrioridadActual()==0) { //Verificamos si el proceso es de tiempo real
 						
-					if(MemoriaTiemporeal>=proceso.getMemoriaRequerida()) {
+					if(MemoriaTiemporeal>=proceso.getMemoriaRequerida()) { //Verificamos si hay memoria suficiente para asignar
 							
 						int RMemo=0;
 						int AMemo=proceso.getMemoriaRequerida();
@@ -95,12 +101,14 @@ public class Recursos {
 								
 									
 									
-								Memoria[cont]=proceso.getID();
-								RMemo+=32;
-								MemoriaTiemporeal-=32;
+								Memoria[cont]=proceso.getID(); //Asignamos el ID al vector memoria
+								RMemo+=32; 
+								MemoriaTiemporeal-=32; 
 								
-								if(RMemo>AMemo) {
-									Asignaciones[cont]=(32-(RMemo-AMemo));
+								
+								if(RMemo>AMemo) { //Si la memoria requerida es menor a los 32 asignados realizara
+									//una operacion para asignarle memoria
+									Asignaciones[cont]=(32-(RMemo-AMemo)); 
 								}else {
 									Asignaciones[cont]=32;
 								}
@@ -108,14 +116,16 @@ public class Recursos {
 							}
 						}
 							
-						Planificador.TiempoReal.Escribir(Planificador.ColaInicial.Leer());
+						Planificador.TiempoReal.Escribir(Planificador.ColaInicial.Leer()); //Agregamos el proceso de tiempo real 
+						// a su respectiva cola
 							
 					}else {
-						leer=false;
+						leer=false; 
 					}
 						
 				}else {
-					Planificador.TrabajosUsuario.Escribir(Planificador.ColaInicial.Leer());
+					Planificador.TrabajosUsuario.Escribir(Planificador.ColaInicial.Leer()); //Sino cumple con la condicion es un proceso
+					//de tipo usuario.
 				}
 					
 			}

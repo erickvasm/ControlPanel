@@ -126,7 +126,7 @@ public class Cola{
 	
 	//Vacia
 	public boolean Vacia() {
-		return ((primero==null)?true:false);
+		return ((primero==null)?true:false);       
 	}
 	
 	
