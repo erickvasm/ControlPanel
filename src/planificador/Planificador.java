@@ -4,6 +4,7 @@ import estructura_almacenamiento.Cola;
 //Importaciones
 import manejador_archivo.Lector;
 import modelo.Proceso;
+import principal.Interfaz;
 
 //La clase Planificador realiza la simulacion del sistema operativo de pruebas
 //esta clase tiene acceso sobre todas las demas.
@@ -11,7 +12,7 @@ public class Planificador extends Thread{
 
 	//Atributos de la Clase Planificador
 	private int SegundosOperacion=0;//Tiempo de ejecucion del planificador
-	private final int QUANTUM=1000;//Quantum de verificacion y ejecucion de los procesos, 1000ms=1s
+	public static int QUANTUM=1000;//Quantum de verificacion y ejecucion de los procesos, 1000ms=1s
 	private Lector lector=new Lector();//Obtener el lector de archivos
 	public static int SiguienteID=1;//Esta variable posibilita que los procesos que son transformados en la clase Lector tengan su propio ID
 	
@@ -28,8 +29,8 @@ public class Planificador extends Thread{
 	public static Cola TrabajosFinalizados=new Cola();//Cola de trabajos finalizados
 	
 	//Referencia del proceso en ejecucion y el expulsado, usadas en los metodos ProcesarAntes() & ProcesarDespues()
-	Proceso ejecucion=null;//Proceso en ejecucion
-	Proceso expulsado=null;//Proceso expulsado
+	public static Proceso ejecucion=null;//Proceso en ejecucion
+	public static Proceso expulsado=null;//Proceso expulsado
 	
 	
 	//Constructor Planificador
@@ -73,6 +74,7 @@ public class Planificador extends Thread{
 			
 		} catch (Exception e) {
 			//Excepcion VACIA
+			e.printStackTrace();
 		}
 	}
 	
@@ -95,24 +97,23 @@ public class Planificador extends Thread{
 			if((ejecucion.getPrioridadActual()!=0) && (!TiempoReal.Vacia())) {
 				
 				CambiarEstado(5);//Cambiar el estado del proceso de usuario a 'Expulsado'
-				MostrarProceso(1);//Mostrar la informacion del proceso en ejecucion
+				MostrarProceso();//Mostrar la informacion del proceso en ejecucion
 				
 				expulsado=ejecucion;//Colocar el proceso expulsado en la referencia indicada
 				ejecucion=null;//Liberar la referencia de ejecucion
 				ejecucion=SiguienteProceso();//Obtener el proceso de Tiempo real
 				CambiarEstado(1);//Cambiar el estado del proceso de tiempo real recien obtenido a 'Corriendo'
-				MostrarProceso(2);//Mostrar la informacion del proceso en ejecucion
+				MostrarProceso();//Mostrar la informacion del proceso en ejecucion
 			
 			}else {
-				CambiarEstado(1);//Cambiar el estado del proceso en ejecucion
-				MostrarProceso(3);//Mostrar la informacion del proceso en ejecucion
+				MostrarProceso();//Mostrar la informacion del proceso en ejecucion
 			}
 			
 		}else {
 			//No lo hay
 			ejecucion=SiguienteProceso();//Buscar un proceso para ejecutar
 			CambiarEstado(1);//Cambiar el estado del proceso a 'Corriendo'
-			MostrarProceso(4);//Mostrar la informacion del proceso en ejecucion
+			MostrarProceso();//Mostrar la informacion del proceso en ejecucion
 			
 		}
 	}
@@ -130,7 +131,7 @@ public class Planificador extends Thread{
 			
 				//Se finaliza el Proceso
 				CambiarEstado(4);//Cambiar el estado del proceso a 'Finalizado'
-				MostrarProceso(5);//Mostrar la informacion del proceso en ejecucion
+				MostrarProceso();//Mostrar la informacion del proceso en ejecucion
 				
 				Recursos.LiberarRecursos(ejecucion);//Liberar los recursos que disponia el Proceso
 				TrabajosFinalizados.Escribir(ejecucion);//Mandar a la cola de los procesos ya finalizados
@@ -142,7 +143,7 @@ public class Planificador extends Thread{
 					
 					ejecucion=expulsado;//Pasar el proceso a la referencia de ejecucion
 					CambiarEstado(1);//Cambiar el estado del proceso a 'Corriendo'
-					MostrarProceso(6);//Mostrar la informacion del proceso en ejecucion
+					MostrarProceso();//Mostrar la informacion del proceso en ejecucion
 					
 					expulsado=null;//Vaciar la referencia de expulsado para las siguientes ejecuciones
 				}
@@ -151,28 +152,18 @@ public class Planificador extends Thread{
 				
 			//Si no se completo se verifica si es un Proceso de Usuario
 			}else if(ejecucion.getPrioridadActual()!=0) {
-				
-				int PrioridadProceso=0;
-				
-				
 				//El Proceso es de usuario por lo tanto se degrada
 				CambiarEstado(2);//Se cambia el estado del proceso a 'Listo'
 				DegradarPrioridad(ejecucion);//Se degrada la prioridad del proceso de usuario
-				PrioridadProceso=ejecucion.getPrioridadActual();
-				MostrarProceso(7);//Mostrar la informacion del proceso en ejecucion
+				MostrarProceso();//Mostrar la informacion del proceso en ejecucion
 				
 				ejecucion=null;//Se Libera la referencia del proceso en ejecucion
-				ejecucion=SiguienteProceso();//
-				
-				//
-				if(PrioridadProceso!=ejecucion.getPrioridadActual()) {
-					MostrarProceso(8);//Mostrar la informacion del proceso en ejecucion
-				}
-				
-				
+				//???
+				ejecucion=SiguienteProceso();
+				MostrarProceso();//Mostrar la informacion del proceso en ejecucion
 				
 			}else {
-				MostrarProceso(9);//Mostrar la informacion del proceso en ejecucion
+				MostrarProceso();//Mostrar la informacion del proceso en ejecucion
 			}
 			
 		}
@@ -198,15 +189,12 @@ public class Planificador extends Thread{
 		}
 	}
 	
-	
-	
-	
 	//Mostrar la informacion del proceso
-	public void MostrarProceso(int i) {
+	public void MostrarProceso() {
 		//Si existe un proceso en ejecucion
 		if(ejecucion!=null) {
 			//Imprimir la informacion del proceso
-			System.out.println("\t<"+i+"> ID Proceso->"+ejecucion.getID()+"|Prioridad->"+ejecucion.getPrioridadActual()+
+			System.out.println("\tID Proceso->"+ejecucion.getID()+"|Prioridad->"+ejecucion.getPrioridadActual()+
 					"|Tiempo Restante->"+ejecucion.getTiempoRestante()+"|Tiempo Requerido->"+ejecucion.getTiempoRequerido()+"|Estado:"+
 					((ejecucion.getEstado()==1)?"Corriendo":((ejecucion.getEstado()==2)?"Listo":((ejecucion.getEstado()==3)?"Bloqueado":((ejecucion.getEstado()==4)?"Finalizado":"Suspendido")))));
 		}

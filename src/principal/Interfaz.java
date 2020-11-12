@@ -155,8 +155,8 @@ public class Interfaz extends JFrame {
 	//METODO MAIN
 	public static void main(String[] args) {
 		
-		Interfaz Gui = new Interfaz ();
+		//Interfaz Gui = new Interfaz ();
 		//Pruebas del planficador
-		// new Planificador().start();  
+		new Planificador().start();  
 	}
 }
