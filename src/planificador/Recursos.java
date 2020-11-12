@@ -1,5 +1,7 @@
 package planificador;
 
+import java.util.ArrayList;
+
 //Importaciones
 import modelo.Proceso;
 
@@ -12,6 +14,9 @@ public class Recursos {
 	private static int MemoriaTiemporeal=64;
 	private static int MemoriaUsuario=960;
 	
+	//Arreglo donde almacenara los 32 colores
+	private static ArrayList<String> colores = new ArrayList<String>(); 
+	
 	private static int Impresoras=2;
 	private static int Escaner=1;
 	private static int Modem=1;
@@ -21,9 +26,47 @@ public class Recursos {
 	//
 	public Recursos() {
 		//
+		
+		AgregarColor();
+
+		
 	}
 	
-	
+	public static void AgregarColor() {
+		colores.add("#F0F8FF"); 
+		colores.add("#FAEBD7");
+		colores.add("#00FFFF");
+		colores.add("#7FFFD4");
+		colores.add("#0000FF");
+		colores.add("#8A2BE2");
+		colores.add("#A52A2A");
+		colores.add("#DEB887");
+		colores.add("#5F9EA0");
+		colores.add("#7FFF00");
+		colores.add("#D2691E");
+		colores.add("#FF7F50");
+		colores.add("#6495ED");
+		colores.add("#DC143C");
+		colores.add("#00FFFF");
+		colores.add("#00008B");
+		colores.add("#008B8B");
+		colores.add("#B8860B");
+		colores.add("#A9A9A9");
+		colores.add("#006400");
+		colores.add("#A9A9A9");
+		colores.add("#BDB76B");
+		colores.add("#8B008B");
+		colores.add("#556B2F");
+		colores.add("#FF8C00");
+		colores.add("#9932CC");
+		colores.add("#8B0000");
+		colores.add("#E9967A");
+		colores.add("#8FBC8F");
+		colores.add("#483D8B");
+		colores.add("#2F4F4F");
+		colores.add("#00CED1");
+		
+	}
 	
 	
 	//Asignar los recursos a los procesos de tiempo real y mueve los procesos de usuario a la cola TrabajosUsuario
