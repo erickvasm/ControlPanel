@@ -69,6 +69,12 @@ public class Interfaz extends JFrame {
 	btncerrar.setBounds(1451, 10, 39, 35);
 	Barra.add(btncerrar);
 	
+	JLabel lblNewLabel_3 = new JLabel("Simulador del Sistema Operativo de Pruebas");
+	lblNewLabel_3.setForeground(Color.WHITE);
+	lblNewLabel_3.setFont(new Font("Lucida Sans Unicode", Font.PLAIN, 18));
+	lblNewLabel_3.setBounds(10, 21, 425, 35);
+	Barra.add(lblNewLabel_3);
+	
 	JTabbedPane Pestanas = new JTabbedPane(JTabbedPane.TOP);
 	Pestanas.setBounds(10, 91, 1480, 598);
 	mainPanel.add(Pestanas);
