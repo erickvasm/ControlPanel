@@ -48,7 +48,7 @@ public class Planificador extends Thread{
 		//Control de Excepciones
 		try {
 			
-			//
+			//Se agregan los colores para disntintivos de memoria
 			Recursos.AgregarColor();
 			
 			
@@ -100,6 +100,7 @@ public class Planificador extends Thread{
 			
 			//Verificar si el proceso es de usuario y si existen procesos de tiempo real
 			if((ejecucion.getPrioridadActual()!=0) && (!TiempoReal.Vacia())) {
+				//Es de usuario y existe un proceso de tiempo real en cola
 				
 				CambiarEstado(5);//Cambiar el estado del proceso de usuario a 'Expulsado'
 				MostrarProceso();//Mostrar la informacion del proceso en ejecucion
@@ -111,7 +112,8 @@ public class Planificador extends Thread{
 				MostrarProceso();//Mostrar la informacion del proceso en ejecucion
 			
 			}else {
-				CambiarEstado(1);
+				//No es un proceso de usuario o la cola de prioridad de tiempo real esta vacia
+				CambiarEstado(1);//Cambiar estado a corriendo
 				MostrarProceso();//Mostrar la informacion del proceso en ejecucion
 			}
 			
@@ -140,7 +142,6 @@ public class Planificador extends Thread{
 				MostrarProceso();//Mostrar la informacion del proceso en ejecucion
 				
 				Recursos.LiberarRecursos(ejecucion);//Liberar los recursos que disponia el Proceso
-				TrabajosFinalizados.Escribir(ejecucion);//Mandar a la cola de los procesos ya finalizados
 				ejecucion=null;//Liberar la referencia de ejecucion
 				
 				//Verificar que existe un proceso expulsado para ejecutarlo

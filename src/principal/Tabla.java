@@ -1,11 +1,17 @@
 package principal;
 
 
+import java.awt.Color;
+import java.awt.Component;
+
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+
 import modelo.Proceso;
 import planificador.Planificador;
+import planificador.Recursos;
 
 //Clase Tabla para hacer posible la gestión de empleados
 public class Tabla extends JTable{
@@ -35,7 +41,47 @@ public class Tabla extends JTable{
 
 	}
 	
+	
+	//Metodo para colorear la tabla segun el proceso que tenga el indice
+	@Override
+	public Component prepareRenderer (TableCellRenderer renderer, int rowindex, int columindex) {
+			
+		//Se obtiene la celda
+		Component componente = super.prepareRenderer(renderer, rowindex, columindex);
+		boolean condition=true;
+		int currentId=-1;
+		
+		
+		try {
+			currentId=Integer.parseInt((String) modeloTabla.getValueAt(rowindex, 0));
+			for(int cont=0;cont<Recursos.Memoria.length;cont++) {
+				if((condition) && (Recursos.Memoria[cont]==currentId)) {
+					condition=false;
+					currentId=cont;
+				}
+			}		
+			
+			if(!condition) {
+				//Si existe un valor(color) relacionado con algun proceso, la celda se colora de dicho color.
+				componente.setBackground((Recursos.CellColor[currentId]!=null)?Color.decode(Recursos.CellColor[currentId]):Color.white);
+				this.repaint();//Repintar la tabla para que no se vean anomalias
+				
+			}else {
+				//Si existe un valor(color) relacionado con algun proceso, la celda se colora de dicho color.
+				componente.setBackground(Color.white);
+				this.repaint();//Repintar la tabla para que no se vean anomalias	
+			}
+		
+		
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return componente; 
+			
+	}	
 
+		
 	//
 	public static void MostrarProcesos() {
 		
@@ -124,7 +170,7 @@ public class Tabla extends JTable{
 		
 		//Cola de Procesos finalizados
 		Planificador.TrabajosFinalizados.setRecorrer();
-		while(Planificador.ColaInicial.existe()) {
+		while(Planificador.TrabajosFinalizados.existe()) {
 			
 			Proceso leer=null;
 			leer=Planificador.TrabajosFinalizados.obtenerProceso();

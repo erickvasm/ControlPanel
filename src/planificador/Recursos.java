@@ -108,7 +108,7 @@ public class Recursos {
 						for(int cont=0;cont<2;cont++) {
 							if((Memoria[cont]==-1) && (RMemo<proceso.getMemoriaRequerida())) {
 								
-								proceso.setUbicacionMemoria(proceso.getUbicacionMemoria() +"&"+cont);//	
+								proceso.setUbicacionMemoria((proceso.getUbicacionMemoria().length()==0)?(cont+""):(proceso.getUbicacionMemoria() +","+cont));//
 								CellColor[cont]=proceso.getColorMemo();//	
 								Memoria[cont]=proceso.getID(); //Asignamos el ID al vector memoria
 								RMemo+=32;//
@@ -211,7 +211,7 @@ public class Recursos {
 						if((Memoria[cont]==-1) && (RMemo<proceso.getMemoriaRequerida())) {
 								
 								
-							proceso.setUbicacionMemoria(proceso.getUbicacionMemoria() +"&"+cont);//
+							proceso.setUbicacionMemoria((proceso.getUbicacionMemoria().length()==0)?(cont+""):(proceso.getUbicacionMemoria() +","+cont));//
 							CellColor[cont]=proceso.getColorMemo();//
 							Memoria[cont]=proceso.getID();//
 							MemoriaUsuario-=32;//
@@ -287,7 +287,7 @@ public class Recursos {
 							
 					}
 				}
-					
+				
 			}else {
 					
 				for (int i =2 ; i < Memoria.length; i++) {//busca la ubicacion en memoria del proceso usuario y la libera
@@ -311,6 +311,7 @@ public class Recursos {
 					
 			}
 			
+			Planificador.TrabajosFinalizados.Escribir(proceso);//Mandar a la cola de los procesos ya finalizados
 		}
 	}
 

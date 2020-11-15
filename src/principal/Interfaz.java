@@ -23,6 +23,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.JScrollPane;
+import javax.swing.border.LineBorder;
 
 
 //
@@ -50,6 +51,7 @@ public class Interfaz extends JFrame {
 		
 		//
 		mainPanel = new JPanel();
+		mainPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		setContentPane(mainPanel);
 		mainPanel.setLayout(null);
 		
