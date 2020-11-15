@@ -48,6 +48,10 @@ public class Planificador extends Thread{
 		//Control de Excepciones
 		try {
 			
+			//
+			Recursos.AgregarColor();
+			
+			
 			//Para poder obtener los procesos se intenta establecer el flujo de lectura
 			//haciendo uso del metodo EstablecerLector() de la clase Lector
 			lector.EstablecerLector();
@@ -65,6 +69,7 @@ public class Planificador extends Thread{
 				
 				//Administrar los procesos a ejecutarse
 				Procesador();
+				Interfaz.masterGui();
 				Thread.currentThread().sleep(QUANTUM);//Quantum de Operatividad del planificador
 				System.out.println("\t  ------------");
 				ProcesadorB();
@@ -106,6 +111,7 @@ public class Planificador extends Thread{
 				MostrarProceso();//Mostrar la informacion del proceso en ejecucion
 			
 			}else {
+				CambiarEstado(1);
 				MostrarProceso();//Mostrar la informacion del proceso en ejecucion
 			}
 			

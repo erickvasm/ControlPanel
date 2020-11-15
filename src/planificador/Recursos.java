@@ -5,34 +5,37 @@ import java.util.ArrayList;
 //Importaciones
 import modelo.Proceso;
 
-//
+//Clase Recursos, utilidad de administracion de recursos
 public class Recursos {
 
-	//RECURSOS DEL SSOP	
-	//Se inician los vectores con sus campos en -1, debido a que ningún ID puede ser negativo, entonces es una forma de 
-	//iniciarlizarloso vacio 
-	private static int Memoria[]= {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
-	private static int Asignaciones[]= {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
+	//RECURSOS DEL SSOP
 	
-	private static int MemoriaTiemporeal=64;
-	private static int MemoriaUsuario=960;
+	/*Se inician los vectores con sus campos en -1, debido a que ningún ID puede ser negativo, entonces es una forma de 
+	iniciarlizarlos vacios*/
+	
+	
+	//Memoria
+	public static int Memoria[]= {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};//
+	public static int Asignaciones[]= {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};//
+	public static String CellColor[]=new String[32];//
+	public static int MemoriaTiemporeal=64;//
+	public static int MemoriaUsuario=960;//
 	
 	//Arreglo donde almacenara los 32 colores
 	private static ArrayList<String> colores = new ArrayList<String>(); 
 	
-	private static int Impresoras=2;
-	private static int Escaner=1;
-	private static int Modem=1;
-	private static int CD=2;
+	
+	//Recursos del SSOP
+	public static int Impresoras=2;//
+	public static int Escaner=1;//
+	public static int Modem=1;//
+	public static int CD=2;//
 	
 	
 	//Constructor de la clase Recursos
 	public Recursos() {
-		//
-		
+		//Agregar los colores para poder usarlos de distinguibles de espacio de memoria
 		AgregarColor();
-
-		
 	}
 	 
 	//Este metódo agrega los colores en "HEXADECIMAL" a la lista de colores que es un ArrayList 
@@ -92,18 +95,24 @@ public class Recursos {
 				if(proceso.getPrioridadActual()==0) { //Verificamos si el proceso es de tiempo real
 						
 					if(MemoriaTiemporeal>=proceso.getMemoriaRequerida()) { //Verificamos si hay memoria suficiente para asignar
-							
+						
+						//Asignar color de memoria al proceso
+						if(colores.size()!=0){
+							proceso.setColorMemo(colores.get(0));
+							colores.remove(0);
+						}
+						
 						int RMemo=0;
 						int AMemo=proceso.getMemoriaRequerida();
 							
 						for(int cont=0;cont<2;cont++) {
 							if((Memoria[cont]==-1) && (RMemo<proceso.getMemoriaRequerida())) {
 								
-									
-									
+								proceso.setUbicacionMemoria(proceso.getUbicacionMemoria() +"&"+cont);//	
+								CellColor[cont]=proceso.getColorMemo();//	
 								Memoria[cont]=proceso.getID(); //Asignamos el ID al vector memoria
-								RMemo+=32; 
-								MemoriaTiemporeal-=32; 
+								RMemo+=32;//
+								MemoriaTiemporeal-=32;//
 								
 								
 								if(RMemo>AMemo) { //Si la memoria requerida es menor a los 32 asignados realizara
@@ -186,8 +195,13 @@ public class Recursos {
 					
 				if ((recusos[0]) && (recusos[1]) && (recusos[2]) && (recusos[3]) && (recusos[4])) {//valida si hay ecursos para que puedan ejecutarse
 						
-					proceso.setEstado(2); //canbia el estado del proseso a listo
+					proceso.setEstado(2); //cambia el estado del proceso a listo
 						
+					//Asignar color de memoria al proceso
+					if(colores.size()!=0){
+						proceso.setColorMemo(colores.get(0));
+						colores.remove(0);
+					}
 						
 						
 					int RMemo=0;
@@ -197,11 +211,13 @@ public class Recursos {
 						if((Memoria[cont]==-1) && (RMemo<proceso.getMemoriaRequerida())) {
 								
 								
-							proceso.setUbicacionMemoria(proceso.getUbicacionMemoria() +"&"+cont);
-							MemoriaUsuario-=32;
-							Memoria[cont]=proceso.getID();
-							RMemo+=32;
+							proceso.setUbicacionMemoria(proceso.getUbicacionMemoria() +"&"+cont);//
+							CellColor[cont]=proceso.getColorMemo();//
+							Memoria[cont]=proceso.getID();//
+							MemoriaUsuario-=32;//
+							RMemo+=32;//
 								
+							//
 							if(RMemo>AMemo) {
 								Asignaciones[cont]=(32-(RMemo-AMemo));
 							}else {
@@ -266,6 +282,8 @@ public class Recursos {
 						Memoria[i]=-1;
 						MemoriaTiemporeal+=32;
 						Asignaciones[i]=-1;
+						CellColor[i]=null;
+						colores.add(proceso.getColorMemo());
 							
 					}
 				}
@@ -278,6 +296,9 @@ public class Recursos {
 						Memoria[i]=-1;
 						MemoriaUsuario+=32;
 						Asignaciones[i]=-1;
+						CellColor[i]=null;
+						colores.add(proceso.getColorMemo());
+						
 					}
 						
 				}

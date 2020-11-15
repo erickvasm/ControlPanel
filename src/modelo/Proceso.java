@@ -24,6 +24,7 @@ public class Proceso {
 	private int ImpresorasAsignadas=0;//Impresoras asignadas
 	private int EscaneresAsignados=0;//Escaneres asignados
 	private int CDAsignados=0;//CD asignados
+	private String colorMemo="";
 
 	//Constructor Proceso
 	public Proceso() {
@@ -186,6 +187,17 @@ public class Proceso {
 	public void setModemAsignadas(int modemAsignadas) {
 		ModemAsignadas = modemAsignadas;
 	}
+
+
+	public String getColorMemo() {
+		return colorMemo;
+	}
+
+
+	public void setColorMemo(String colorMemo) {
+		this.colorMemo = colorMemo;
+	}
+	
 	
 	
 	
