@@ -10,7 +10,7 @@ import java.io.FileReader;
 public class Conexion {
 	
 	//ATRIBUTOS DE LA CLASE
-	private final String DIRECCION_ARCHIVO="recursos/receptor/procesos.txt";//Direccion del archivo con los procesos
+	private final String DIRECCION_ARCHIVO="recursos/receptor/procesos.txt";//Direccion del archivo con las descripciones de los procesos
 	private File Archivo=null;//Referencia del archivo
 	private FileReader Lector=null;//Referencia del lector
 	private BufferedReader FlujoLector=null;//Referencia del flujo lector
@@ -21,8 +21,6 @@ public class Conexion {
 		//Vacio
 	}
 	
-	
-						
 	
 	
 							//INICIAR LA RECUPERACION

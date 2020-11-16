@@ -1,11 +1,12 @@
 package modelo;
 
-//Esta Clase contiene la descripciones del proceso
+/*Esta Clase contiene la descripciones del proceso extraidas del archivo indicado
+y ademas brindan informacion de operatividad a la hora de realizar la simulacion*/
 public class Proceso {
 	
 	//Atributos del proceso
 	private int ID=0;//ID del proceso
-		//>Datos extraidos de las cadenas de carecteres prosendentes del archivo de descripciones
+		//>Datos extraidos de las cadenas de carecteres prosedentes del archivo de descripciones
 	private int TiempoLlegada=0;//Tiempo de llegada (desde archivo)
 	private int PrioridadInicial=0;//Prioridad inicial (desde archivo)
 	private int TiempoRequerido=0;//Tiempo de Procesado (desde archivo)
@@ -24,7 +25,8 @@ public class Proceso {
 	private int ImpresorasAsignadas=0;//Impresoras asignadas
 	private int EscaneresAsignados=0;//Escaneres asignados
 	private int CDAsignados=0;//CD asignados
-	private String colorMemo="";
+	private String colorMemo="";//Esta variable contiene el color con el cual en la simulacion 
+								//el proceso se relaciona con la memoria
 
 	//Constructor Proceso
 	public Proceso() {
@@ -34,7 +36,7 @@ public class Proceso {
 	
 									//METODOS SETTER & GETTER
 	
-	//Todos los siguientes metodos sirven para obtener y modificar los distintos atributos de esta clase					
+	//Todos los siguientes metodos sirven para obtener y modificar los distintos atributos de esta clase Proceso
 	
 	public int getTiempoLlegada() {
 		return TiempoLlegada;

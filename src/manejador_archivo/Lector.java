@@ -7,19 +7,17 @@ import java.io.FileReader;
 import modelo.Proceso;
 import planificador.Planificador;
 
-//Esta Clase mediante la otra denominada Conexion hacen posible obtener las lineas 
-//de descripcion de los procesos en el archivo
+/*Esta Clase mediante la otra denominada Conexion hacen posible obtener las lineas 
+de descripcion de los procesos en el archivo*/
 public class Lector {
 	
 	private Conexion con=new Conexion();//Se emplea esta clase para facilitar la obtencion del flujo de lectura del archivo
 	private BufferedReader FlujoLector=null;//referencia del Flujo lector del archivo
 	
 	
-	
-	
 	//Constructor Lector
 	public Lector() {
-		
+		//VACIA
 	}
 	
 	
@@ -169,11 +167,9 @@ public class Lector {
 						temp.setTiempoRestante(temp.getTiempoRequerido());
 						temp.setEstado(3);//Establecer estado en Bloqueado, Estados: 1=Corriendo, 2-Listo, 3-Bloquedo, 4-Finalizado, 5-Expulsado
 						
-						temp.setID(Planificador.SiguienteID);//Definir el id del proceso
-						//mediante la variable estatica SiguienteID
+						temp.setID(Planificador.SiguienteID);//Definir el id del proceso mediante la variable estatica SiguienteID
 						
-						Planificador.SiguienteID++;//Incrementar el valor de SiguienteID
-						//para proximos procesos
+						Planificador.SiguienteID++;//Incrementar el valor de SiguienteID para proximos procesos
 						
 						//El objeto que retorna este metodo recibe el valor del objeto temporal creado
 						//anteriormente
@@ -191,8 +187,8 @@ public class Lector {
 	
 	
 	
-	//Mediante el metodo ObtenerFlujo(), establecemos el flujo
-	//en la referencia FlujoLector
+	/*Mediante el metodo ObtenerFlujo(), establecemos el flujo
+	en la referencia FlujoLector*/
 	public void EstablecerLector() {
 		//La referencia toma el valor del flujo lector
 		FlujoLector=ObtenerFlujoLector();
@@ -200,11 +196,9 @@ public class Lector {
 	
 	
 	
-	
-	
-	//Verificar si el flujo esta establecido
+	//Verificar si el flujo se encuentra establecido
 	public boolean FlujoEstablecido() {
-		return ((FlujoLector!=null)?true:false);//Si la refencia esta vacia significa no se establecio
+		return ((FlujoLector!=null)?true:false);//Si la refencia esta vacia significa no se encuentra establecio
 	}
 	
 }

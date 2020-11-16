@@ -3,22 +3,14 @@ package principal;
 //Importaciones
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
 import planificador.Planificador;
 import planificador.Recursos;
-
-import java.awt.FlowLayout;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.net.URL;
 import java.awt.Color;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JLabel;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import java.awt.SystemColor;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
@@ -26,17 +18,19 @@ import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
 
 
-//
+//Esta clase permite visualizar la operatividad del Planificador
 public class Interfaz extends JFrame {
 	
 
-	//
-	private JPanel mainPanel;//
-	private final int X=1200,Y=700;//
+	//Atributos
+	private JPanel mainPanel;//Panel Princiopal
+	private final int X=1200,Y=700;//Dimensiones de pantalla
 	
-	//
-	private JTable table_1;//
-	private JTable table;
+	//Componentes de GUI
+	private JTable table_1;//Tabla de Procesos
+	private JTable table;//Tabla de Memoria
+	
+	//RECURSOS DEL SSOP
 	private static JLabel num_impre;
 	private static JLabel num_cd;
 	private static JLabel num_modem;
@@ -49,32 +43,42 @@ public class Interfaz extends JFrame {
 	//Construir la Interfaz grafica
 	public Interfaz() {
 		
-		//
+								//PANEL PRINCIPAL Y VENTANA
+		
+		//Construir el panel principal
 		mainPanel = new JPanel();
 		mainPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
-		setContentPane(mainPanel);
 		mainPanel.setLayout(null);
 		
-		//
+		//Establecer las caracteristicas de la ventana principal
 		setSize(X, Y);
 		setResizable(false);
 		setUndecorated(true);  
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
+		setContentPane(mainPanel);
 		
+		
+		
+								//BARRA PERSONALIZADA
+		
+		
+		//Barra Personalizada
 		JPanel Barra = new MotionPanel(this);
 		Barra.setBackground(new Color(33, 33, 33));
 		Barra.setBounds(0, 0, 1200, 80);
 		mainPanel.add(Barra);
 		Barra.setLayout(null);
 		
-		JButton btncerrar = new JButton("");
 		
+		//Boton de cerrar
+		JButton btncerrar = new JButton("");
 		btncerrar.setBackground(new Color(33, 33, 33));
 		btncerrar.setForeground(Color.BLACK);
 		btncerrar.setIcon(new ImageIcon(Interfaz.class.getResource("/imagenes/cerrar.png")));
 		btncerrar.setBounds(1141, 10, 39, 35);
 		Barra.add(btncerrar);
+		
 		
 		JLabel lblNewLabel_3 = new JLabel("Simulador del Sistema Operativo de Pruebas");
 		lblNewLabel_3.setForeground(Color.WHITE);
@@ -82,9 +86,18 @@ public class Interfaz extends JFrame {
 		lblNewLabel_3.setBounds(10, 21, 425, 35);
 		Barra.add(lblNewLabel_3);
 		
+		
+						//PESTANAS DE RECURSOS Y PRINCIPAL
+		
+		
+		
+		
+		
 		JTabbedPane Pestanas = new JTabbedPane(JTabbedPane.TOP);
 		Pestanas.setBounds(10, 91, 1180, 598);
 		mainPanel.add(Pestanas);
+		
+			//Panel principal
 		
 		JPanel panel_principal = new JPanel();
 		Pestanas.addTab("Principal", null, panel_principal, null);
@@ -98,20 +111,19 @@ public class Interfaz extends JFrame {
 		scrollPane.setViewportView(table_1);
 		
 		JButton btnNewButton = new JButton("Iniciar");
-		
 		btnNewButton.setForeground(new Color(255, 255, 255));
 		btnNewButton.setBackground(new Color(0, 128, 0));
 		btnNewButton.setFont(new Font("Lucida Sans Unicode", Font.PLAIN, 15));
 		btnNewButton.setBounds(1005, 529, 85, 21);
 		panel_principal.add(btnNewButton);
 		
+		
+				//Panel de recursos
+		
 		JPanel panel_recursos = new JPanel();
 		Pestanas.addTab("Recursos", null, panel_recursos, null);
 		panel_recursos.setLayout(null);
 		
-		
-		
-	
 		JLabel Impresora = new JLabel();
 		Impresora.setIcon(new ImageIcon(Interfaz.class.getResource("/imagenes/impresora (3).png")));
 		Impresora.setBounds(615, 56, 76, 88);
@@ -175,25 +187,22 @@ public class Interfaz extends JFrame {
 		//Eventos
 		btncerrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) { 
-				
-			
-			System.exit(0);
-				
+				//Cerrar la ventana
+				System.exit(0);	
 			}
 		});
 		
+		//Iniciar la simulacion
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
-				
+				//Iniciar la simulacion creando un nuevo Planificador y ejecutandolo
 				new Planificador().start(); 
 				btnNewButton.setEnabled(false);
-				
 			}
 		});
 		
 		
-		//Visible
+		//VISIBILIDAD DE LA VENTANA
 		setVisible(true);	
 	
 	} 
@@ -201,7 +210,8 @@ public class Interfaz extends JFrame {
 	
 	
 	
-	//
+	/*Este metodo muestra el estado de todos los procesos y recursos mediante los distintos
+	componentes de la vetana.*/
 	public static void masterGui() {
 		
 		//Refrescar la informacion de los recursos
@@ -210,12 +220,12 @@ public class Interfaz extends JFrame {
 		num_modem.setText(Recursos.Modem+"");
 		num_scanner.setText(Recursos.Escaner+"");
 	
-		//Memorias int
+		//Mostrar el Uso de las Memorias
 		memoriaUsur.setText("Memoria de tiempo usuario:"+Recursos.MemoriaUsuario);
 		memoriaReal.setText("Memoria de tiempo real:"+Recursos.MemoriaTiemporeal);
 		
-		TablaMemoria.RellenarMemoria();
-		Tabla.MostrarProcesos();
+		TablaMemoria.RellenarMemoria();//Mostrar los procesos relacionados con alguna direccion de Memoria
+		Tabla.MostrarProcesos();//Mostrar todas las propiedades de los procesos
 		
 	}
 	
@@ -225,8 +235,6 @@ public class Interfaz extends JFrame {
 	
 	
 							//METODO MAIN
-	
-	
 	//METODO MAIN
 	public static void main(String[] args) {
 		//Crear la Interfaz

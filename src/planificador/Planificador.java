@@ -1,22 +1,27 @@
 package planificador;
 
-import estructura_almacenamiento.Cola;
 //Importaciones
+import estructura_almacenamiento.Cola;
 import manejador_archivo.Lector;
 import modelo.Proceso;
 import principal.Interfaz;
 
-//La clase Planificador realiza la simulacion del sistema operativo de pruebas
-//esta clase tiene acceso sobre todas las demas.
+/*La clase Planificador realiza la simulacion del sistema operativo de pruebas mediante su estructuacion como
+'Hilo', esta clase tiene acceso sobre todas las demas.*/
 public class Planificador extends Thread{
 
+	
+	
 	//Atributos de la Clase Planificador
-	private int SegundosOperacion=0;//Tiempo de ejecucion del planificador
+	private int SegundosOperacion=0;//Tiempo que lleva el planificador ejecutandose
 	public static int QUANTUM=1000;//Quantum de verificacion y ejecucion de los procesos, 1000ms=1s
 	private Lector lector=new Lector();//Obtener el lector de archivos
 	public static int SiguienteID=1;//Esta variable posibilita que los procesos que son transformados en la clase Lector tengan su propio ID
 	
-	//Colas de Procesos
+	
+	
+	//COLAS DE PROCESOS
+		//Cola de llegada de los procesos
 	public static Cola ColaInicial=new Cola();//Cola de llegada
 		//>Cola de Tiempo Real
 	public static Cola TiempoReal=new Cola();//Prioridad 0
@@ -28,9 +33,12 @@ public class Planificador extends Thread{
 		//Cola de trabajos Finalizados
 	public static Cola TrabajosFinalizados=new Cola();//Cola de trabajos finalizados
 	
-	//Referencia del proceso en ejecucion y el expulsado, usadas en los metodos ProcesarAntes() & ProcesarDespues()
-	public static Proceso ejecucion=null;//Proceso en ejecucion
-	public static Proceso expulsado=null;//Proceso expulsado
+	
+	
+	//Referencia del proceso en ejecucion y el expulsado, usadas en los metodos Procesador() & ProcesadorB()
+	public static Proceso ejecucion=null;//Proceso en estado de ejecucion
+	public static Proceso expulsado=null;//Proceso en estado de expulsado
+	
 	
 	
 	//Constructor Planificador
@@ -40,46 +48,64 @@ public class Planificador extends Thread{
 	
 	
 	
-	
-	
 	//Estructuracion del planificador
 	@Override
 	public void run() {
+		
 		//Control de Excepciones
 		try {
 			
-			//Se agregan los colores para disntintivos de memoria
+			
+			/*Este metodo agrega en una lista los colores (32) que el simulador
+			tendra disponibles para representar las relaciones de los procesos con la memoria*/
 			Recursos.AgregarColor();
 			
 			
-			//Para poder obtener los procesos se intenta establecer el flujo de lectura
-			//haciendo uso del metodo EstablecerLector() de la clase Lector
+			/*Para poder obtener los procesos se intenta establecer el flujo de lectura
+			haciendo uso del metodo EstablecerLector() de la clase Lector, para posteriormente
+			al usar el metodo ObtenerProceso() en la estructura ciclica siguiente
+			se extraigan los procesos del archivo de descripciones*/
 			lector.EstablecerLector();
 			
-			//Mientras Verdadero
+			//El Planificador se ejecutara Mientras (VERDADERO)
 			while(true) {
 				
-				//Escribir el tiempo de ejecucion del planificador
+				//Escribir el tiempo que lleva el planificador ejecutandose (CONSOLA)
 				System.out.println("\n\nPlanificador segundo "+SegundosOperacion+":\n\n");
 				
 				//Entrada & Clasificacion de Colas
-				ObtenerProceso();//Obtener procesos del archivo de descripciones
-				Recursos.ClasificarColaInicial();//Clasifica la cola inicial
-				Recursos.ClasificarColausuario();//Se Clasifica la cola de usuario
+				ObtenerProceso();//Obtener procesos del archivo de descripciones haciendo uso del metodo ExtraerProceso() en la clase Lector
+				Recursos.ClasificarColaInicial();//Se Clasifica la Cola Inicial
+				Recursos.ClasificarColausuario();//Se Clasifica la Cola de Usuario
 				
-				//Administrar los procesos a ejecutarse
+									//Administrar los procesos a ejecutarse
+				
+				/*Este metodo determina que proceso es el siguiente a ejcutarse logicamente tomando
+				 * en cuenta las prioridades y estados de estos*/
 				Procesador();
-				Interfaz.masterGui();
+				
+				/*Llama el metodo MasterGui() en la clase Interfaz el cual mostrara toda 
+				 * la informacion relacionada con los procesos y los recursos del SSOP (GUI)*/
+				Interfaz.masterGui();//
+
+				
 				Thread.currentThread().sleep(QUANTUM);//Quantum de Operatividad del planificador
-				System.out.println("\t  ------------");
+				
+				
+				System.out.println("\t  ------------");//Indicar en consola que se completo el Quantum (CONSOLA)
+				
+				
+				/*Restar 1 al tiempo de procesado restante al Proceso que estuvo ejecucion,
+				 * degradar prioridada si el Proceso que estuvo en ejecucion era de Usuario*/
 				ProcesadorB();
-				//Aumentar el tiempo de ejecuciond del planificador
+				
+				
+				//Aumentar el tiempo de ejecucion del planificador (CONSOLA)
 				SegundosOperacion++;
 			}
 			
 		} catch (Exception e) {
 			//Excepcion VACIA
-			e.printStackTrace();
 		}
 	}
 	
@@ -89,7 +115,7 @@ public class Planificador extends Thread{
 	
 	
 	
-						//METODOS DE PLANIFICACION
+									//METODOS DE PLANIFICACION
 	
 	
 	//Funciones antes del cuantum de operatividad
@@ -165,8 +191,8 @@ public class Planificador extends Thread{
 				MostrarProceso();//Mostrar la informacion del proceso en ejecucion
 				
 				ejecucion=null;//Se Libera la referencia del proceso en ejecucion
-				//???
-				ejecucion=SiguienteProceso();
+				
+				ejecucion=SiguienteProceso();//Obtener el siguiente Proceso
 				MostrarProceso();//Mostrar la informacion del proceso en ejecucion
 				
 			}else {
@@ -184,6 +210,7 @@ public class Planificador extends Thread{
 		//Si existe un proceso en ejecucion
 		if(ejecucion!=null) {
 			ejecucion.setEstado(E);//Cambiar el estado del proceso en ejecucion
+			//1-Ejecucion,2-Listo,3-Bloqueado,4-Finalizado,5-Expulsado
 		}
 	}
 	
@@ -210,7 +237,7 @@ public class Planificador extends Thread{
 	
 	
 	
-	//Este metodo degrada la prioridad del proceso y lo manda a cola
+	//Este metodo degrada la prioridad del proceso y lo manda a cola definida por su nueva prioridad
 	public void DegradarPrioridad(Proceso proceso) {
 		//Verificar que el proceso a degradar no este vacio
 		if(proceso!=null) {
@@ -269,15 +296,9 @@ public class Planificador extends Thread{
 		return proceso;//Se retorna el siguiente proceso a ejecutar
 	}
 	
+					
 	
-	
-	
-	
-	
-	
-	
-	
-	
+							//LECTOR DE PROCESOS
 	
 	
 	//Este metodo utiliza la clase Lector para obtener objetos Proceso con los datos presentes

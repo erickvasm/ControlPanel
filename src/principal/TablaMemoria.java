@@ -1,5 +1,6 @@
 package principal;
 
+//Importaciones
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JTable;
@@ -8,7 +9,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import planificador.Recursos;
 
-//Clase TablaMemoria muestra el estado del recursos memoria en el SSOP
+//Clase TablaMemoria muestra el estado de la memoria del SSOP
 public class TablaMemoria extends JTable{
 	
 	//Modelo de la tabla
@@ -18,34 +19,36 @@ public class TablaMemoria extends JTable{
 	public TablaMemoria(){
 		
 		
-		//Características del modelo de tabla empleado
+		//Características del modelo de Tabla Memoria
 		modeloTabla=new DefaultTableModel(
 			new Object[][] {
 			},
+			
+			//Crear las columnas
 			new String[] {
 				"Dirreción", "Proceso","M.Ocupada"
 			}
 		);
 		
-		this.setEnabled(false);
-		this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		this.setEnabled(false);//No editable
+		this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);//No editable
 		this.setDefaultEditor(Object.class,null);
-		this.setModel(modeloTabla);
+		this.setModel(modeloTabla);//Establecer el modelo
 		
-		//Llenar la tabla con las 32 posiciones
-		filler();
+		filler();//Crear las 32 filas que representan los bloques de memoria
 
 	}
 	
 
-	//Metodo para colorear la tabla segun el proceso que tenga el indice
+	/*Metodo para colorear las filas de la tabla si al relacionar el indice actual
+	con el de Memoria 'Recursos' existe un metodo relacionado.*/
 	@Override
 	public Component prepareRenderer (TableCellRenderer renderer, int rowindex, int columindex) {
 		
 		//Se obtiene la celda
 		Component componente = super.prepareRenderer(renderer, rowindex, columindex);
 		
-		//Si existe un valor(color) relacionado con algun proceso, la celda se colora de dicho color.
+		//Si existe un valor(color HEXA) relacionado con algun proceso, la celda se colora de dicho color.
 		componente.setBackground((Recursos.CellColor[rowindex]!=null)?Color.decode(Recursos.CellColor[rowindex]):Color.white);
 		this.repaint();//Repintar la tabla para que no se vean anomalias
 		
@@ -60,7 +63,7 @@ public class TablaMemoria extends JTable{
 		//Recorrer los indices de la tabla
 		for(int cont=0;cont<32;cont++) {
 				
-			//En la posicion dada rellenar la fila con la informacion del proceso (id y memoria ocupada en cierto bloque)
+			//En fila actual se muestra la informacion de los procesos (id y memoria ocupada en cierto bloque) si existe una relacion del indice actual y Memoria 'Recursos'
 			modeloTabla.setValueAt( (String) ( (Recursos.Memoria[cont]!=-1)?Integer.toString(Recursos.Memoria[cont]):""), cont, 1);
 			modeloTabla.setValueAt( (String) ( (Recursos.Asignaciones[cont]!=-1)?Integer.toString(Recursos.Asignaciones[cont]):""), cont, 2);
 				
@@ -71,20 +74,21 @@ public class TablaMemoria extends JTable{
 	
 	
 	
-	//Rellenar la tabla incial
+	//Crear las 32 filas de la tabla
 	public static void filler() {
 		
+		//Control de Excepciones
 		try {
 			
-			modeloTabla.setRowCount(0);
+			modeloTabla.setRowCount(0);//Resetear la tabla
 			
 			//Crea las 32 posiciones de la memoria
 			for(int cont=0;cont<32;cont++) {
-				modeloTabla.addRow(new String[] {cont+"","",""});
+				modeloTabla.addRow(new String[] {cont+"","",""});//Se crea la fila numero 'cont'
 			}
 			
 		} catch (Exception e) {
-			// TODO: handle exception
+			//Excepcion VACIA
 		}
 
 	}
