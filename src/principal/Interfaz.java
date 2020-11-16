@@ -47,7 +47,7 @@ public class Interfaz extends JFrame {
 		
 		//Construir el panel principal
 		mainPanel = new JPanel();
-		mainPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
+		mainPanel.setBorder(new LineBorder(new Color(0, 0, 0), 3));
 		mainPanel.setLayout(null);
 		
 		//Establecer las caracteristicas de la ventana principal
