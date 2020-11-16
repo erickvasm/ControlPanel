@@ -9,11 +9,17 @@ import java.awt.Color;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JLabel;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.net.URL;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
+import java.awt.Image;
+import java.awt.Toolkit;
+
 import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
 
@@ -58,6 +64,15 @@ public class Interfaz extends JFrame {
 		setLocationRelativeTo(null);
 		setContentPane(mainPanel);
 		
+		//Añadiendo el icono
+		//Control de excepciones
+		try {
+			Image iconoPropio = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/appIcon.png"));
+			this.setIconImage(iconoPropio);
+		}catch(Exception e) {
+			//Exepcion vacia
+		}
+		
 		
 		
 								//BARRA PERSONALIZADA
@@ -83,8 +98,13 @@ public class Interfaz extends JFrame {
 		JLabel lblNewLabel_3 = new JLabel("Simulador del Sistema Operativo de Pruebas");
 		lblNewLabel_3.setForeground(Color.WHITE);
 		lblNewLabel_3.setFont(new Font("Lucida Sans Unicode", Font.PLAIN, 18));
-		lblNewLabel_3.setBounds(10, 21, 425, 35);
+		lblNewLabel_3.setBounds(122, 21, 425, 35);
 		Barra.add(lblNewLabel_3);
+		
+		JLabel iconer = new JLabel("");
+		imageResizer(iconer,"/imagenes/appIcon.png",68,63);
+		iconer.setBounds(10, 7, 68, 63);
+		Barra.add(iconer);
 		
 		
 						//PESTANAS DE RECURSOS Y PRINCIPAL
@@ -227,6 +247,26 @@ public class Interfaz extends JFrame {
 		TablaMemoria.RellenarMemoria();//Mostrar los procesos relacionados con alguna direccion de Memoria
 		Tabla.MostrarProcesos();//Mostrar todas las propiedades de los procesos
 		
+	}
+	
+	
+
+	//Cargador de imagenes
+	public void imageResizer(JLabel componente,String dir,int x,int y) {
+		try {
+			
+			URL imagenBuffer= Interfaz.class.getResource(dir);
+			
+			BufferedImage ima=ImageIO.read(imagenBuffer.openStream());
+			
+			Image imagenRedimensionada = ima.getScaledInstance(x,y, Image.SCALE_SMOOTH);
+			ImageIcon icono=new ImageIcon(imagenRedimensionada);
+			
+			componente.setIcon(icono);
+			
+		}catch(Exception e) {
+			componente.setText("");
+		}
 	}
 	
 	
