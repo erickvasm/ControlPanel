@@ -169,11 +169,13 @@ public class Lector {
 						
 						temp.setID(Planificador.SiguienteID);//Definir el id del proceso mediante la variable estatica SiguienteID
 						
-						Planificador.SiguienteID++;//Incrementar el valor de SiguienteID para proximos procesos
+						//Se verifica si las descripciones del proceso no presentan anomalias
+						transformado=verificarSolicitud(temp);
 						
-						//El objeto que retorna este metodo recibe el valor del objeto temporal creado
-						//anteriormente
-						transformado=temp;
+						//Si la referencia del proceso no esta vacia se entiende que no hay anomalias
+						if(transformado!=null) {
+							Planificador.SiguienteID++;//Incrementar el valor de SiguienteID para proximos procesos
+						}
 					}
 				}
 			} catch (Exception e) {
@@ -182,6 +184,98 @@ public class Lector {
 		}
 		return transformado;//Retornar el objeto Proceso
 	}
+	
+	
+	
+	//Se verifica las descripciones del proceso parametro para determinar que no existan incongruencias
+	public Proceso verificarSolicitud(Proceso p) {
+	
+		//Verificar si el parametro no esta vacio
+		if(p!=null) {
+			
+			//Banderas de verificacion
+			boolean verificar[]={false,false,false,false,false,false,false};
+				
+			//Verificar que la priordidad este en rango entre 0 y 3
+			if((p.getPrioridadActual()<4) && (p.getPrioridadActual()>=0)) {
+				verificar[0]=true;
+			}
+				
+			//Verificar si el tiempo requerido es mayor a 0
+			if(p.getTiempoRequerido()>0) {
+				verificar[1]=true;
+			}
+				
+			//Comprobar la Memoria solicitada
+			if(verificar[0]) {
+					
+				//Verificar la prioridad actual
+				if(p.getPrioridadActual()!=0) {
+					//De usuario
+						
+					//Verificar memoria de usuario
+					if((p.getMemoriaRequerida()<961) && (p.getMemoriaRequerida()>=1)) {
+						verificar[2]=true;
+					}
+						
+										//VERIFICAR RECURSOS
+					//Impresoras
+					if((p.getImpresorasSolicitas()<3) && (p.getImpresorasSolicitas()>=0)) {
+						verificar[3]=true;
+					}
+						
+					//Escaneres
+					if((p.getEscaneresSolicitados()<2) && (p.getEscaneresSolicitados()>=0)) {
+						verificar[4]=true;
+					}
+						
+					//Modem
+					if((p.getModemSolicitado()<2) && (p.getModemSolicitado()>=0)) {
+						verificar[5]=true;
+					}
+						
+					//CD
+					if((p.getCDSolicitados()<3) && (p.getCDSolicitados()>=0)) {
+							verificar[6]=true;
+					}
+						
+				}else {
+					//De tiempo real
+						
+					//Verificar memoria de tiempo real
+					if((p.getMemoriaRequerida()<65) && (p.getMemoriaRequerida()>=1)) {
+						verificar[2]=true;
+					}
+						
+					//Verificar que no se le hayan asignado recursos de E/S
+					if((p.getImpresorasSolicitas()==0) && (p.getEscaneresSolicitados()==0) && (p.getModemSolicitado()==0) && (p.getCDSolicitados()==0)) {
+						verificar[3]=true;
+						verificar[4]=true;
+						verificar[5]=true;
+						verificar[6]=true;
+					}
+						
+				}
+			}
+				
+			//Verificar que la descripcion del proceso no este anomala
+			if((verificar[0]) && (verificar[1]) && (verificar[2]) && (verificar[3]) && (verificar[4]) && (verificar[5]) && (verificar[6])) {
+				//No hay anomalias
+				return p;
+			}else {
+				//Existe anomalia
+				System.out.println("El Proceso con tiempo de llegada: "+p.getTiempoLlegada()+" presenta descripciones anomalas.");
+				return null;
+			}
+			
+				
+		}else {
+			//El proceso esta vacio se retorna null
+			return null;
+		}
+	}
+		//Modify
+	
 	
 	
 	

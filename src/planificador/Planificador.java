@@ -1,3 +1,17 @@
+/*
+ * Autores:
+ * 
+ * Jurgen A.
+ * Pablo D.
+ * Erick V.
+ * Cris T.
+ *
+ *Proyecto SO
+ *Nov 2020
+ *
+ *
+ * */
+
 package planificador;
 
 //Importaciones

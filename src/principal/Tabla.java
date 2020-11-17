@@ -49,15 +49,19 @@ public class Tabla extends JTable{
 	@Override
 	public Component prepareRenderer (TableCellRenderer renderer, int rowindex, int columindex) {
 			
-		//Se obtiene la celda actual
-		Component componente = super.prepareRenderer(renderer, rowindex, columindex);
+		//referencia de celda actual
+		Component componente=null;
 		
-		//Estas variables definiran si el la fila actual debera colorearse
-		boolean condition=true;
-		int currentId=-1;
 		
 		//Control de excepciones
 		try {
+			
+			//Se obtiene la celda actual
+			componente = super.prepareRenderer(renderer, rowindex, columindex);
+			
+			//Estas variables definiran si el la fila actual debera colorearse
+			boolean condition=true;
+			int currentId=-1;
 			
 			//Obtenemos el id del proceso en la fila recorrida por el metodo
 			currentId=Integer.parseInt((String) modeloTabla.getValueAt(rowindex, 0));
@@ -190,6 +194,24 @@ public class Tabla extends JTable{
 		}
 		
 		
+		
+	
+		
+		//Mostrar la Cola de trabajos de usuario
+		Planificador.TrabajosUsuario.setRecorrer();//Reiniciar el recorrido
+		//Mientras la referencia de recorrido no este vacia
+		while(Planificador.TrabajosUsuario.existe()) {
+							
+			Proceso leer=null;//Referencia del proceso a leer
+			leer=Planificador.TrabajosUsuario.obtenerProceso();//Leer el proceso sin desligarlo de la cola perteneciente
+							
+			//Si el proceso no esta vacio
+			if(leer!=null) {
+				modeloTabla.addRow(ObtenerDatos(leer));//Se agrega una fila en la tabla con las descripciones del proceso provistas por el metodo 'ObtenerProcesos()'
+			}
+							
+			Planificador.TrabajosUsuario.avanzar();//Se avanza en el recorrido de la cola
+		}
 		
 				
 		

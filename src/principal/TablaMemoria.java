@@ -45,12 +45,21 @@ public class TablaMemoria extends JTable{
 	@Override
 	public Component prepareRenderer (TableCellRenderer renderer, int rowindex, int columindex) {
 		
-		//Se obtiene la celda
-		Component componente = super.prepareRenderer(renderer, rowindex, columindex);
+		//Referencia de celda actual
+		Component componente = null;
 		
-		//Si existe un valor(color HEXA) relacionado con algun proceso, la celda se colora de dicho color.
-		componente.setBackground((Recursos.CellColor[rowindex]!=null)?Color.decode(Recursos.CellColor[rowindex]):Color.white);
-		this.repaint();//Repintar la tabla para que no se vean anomalias
+		//Control de excepciones
+		try {
+			
+			//Obtener celda actual
+			componente = super.prepareRenderer(renderer, rowindex, columindex);
+			//Si existe un valor(color HEXA) relacionado con algun proceso, la celda se colora de dicho color.
+			componente.setBackground((Recursos.CellColor[rowindex]!=null)?Color.decode(Recursos.CellColor[rowindex]):Color.white);
+			this.repaint();//Repintar la tabla para que no se vean anomalias
+			
+		} catch (Exception e) {
+			//Excepcion VACIA
+		}
 		
 		return componente; 
 		
@@ -68,7 +77,6 @@ public class TablaMemoria extends JTable{
 			modeloTabla.setValueAt( (String) ( (Recursos.Asignaciones[cont]!=-1)?Integer.toString(Recursos.Asignaciones[cont]):""), cont, 2);
 				
 		}
-		
 		
 	}
 	
