@@ -1,7 +1,7 @@
 # ProyectoSO
 Proyecto final sobre un planificador en un Sistema Operativo.
 
-#autores 
+# Autores 
 
 Cris Taisigüe Álvarez
 
