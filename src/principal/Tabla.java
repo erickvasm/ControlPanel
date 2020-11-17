@@ -114,7 +114,7 @@ public class Tabla extends JTable{
 		
 		//Mostrar el proceso expulsado si existe
 		if(Planificador.expulsado!=null) {
-			modeloTabla.addRow(ObtenerDatos(Planificador.ejecucion));
+			modeloTabla.addRow(ObtenerDatos(Planificador.expulsado));
 		}
 		
 		
