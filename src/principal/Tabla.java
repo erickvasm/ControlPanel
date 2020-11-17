@@ -264,7 +264,7 @@ public class Tabla extends JTable{
 		
 		//Agregar las descripciones de los proceso al Arreglo String
 		current[0]=proceso.getID()+"";
-		current[1]=((proceso.getEstado()==1)?"Ejecucion":((proceso.getEstado()==2)?"Listo":((proceso.getEstado()==3)?"Bloqueado":((proceso.getEstado()==4)?"Finalizado":"Listo"))));
+		current[1]=((proceso.getEstado()==1)?"Ejecucion":((proceso.getEstado()==2)?"Listo":((proceso.getEstado()==3)?"Bloqueado":((proceso.getEstado()==4)?"Finalizado":"Expulsado"))));
 		current[2]=proceso.getTiempoLlegada()+"";
 		current[3]=proceso.getPrioridadInicial()+"";
 		current[4]=proceso.getPrioridadActual()+"";
