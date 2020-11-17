@@ -286,6 +286,11 @@ public class Lector {
 	public void EstablecerLector() {
 		//La referencia toma el valor del flujo lector
 		FlujoLector=ObtenerFlujoLector();
+		
+		//Avisar si el flujo de lectura es erroneo
+		if(FlujoLector==null) {
+			System.err.println("Error de lectura: error al establecer el flujo de lectura mediante los metodos en Conexion <ERR:Lector:ObtenerFlujoLector()>");
+		}
 	}
 	
 	

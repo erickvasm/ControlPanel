@@ -38,15 +38,15 @@ public class Conexion {
 				//Existe
 				return Archivo;
 			}else {
-				//No existe
-				
+				//No existe	
+				System.err.println("Error de lectura: el archivo no existe o es un directorio, Direccion Provista:'"+DIRECCION_ARCHIVO+"' <Err:Primera Fase>");
 				//Abortar conexion
 				CerrarLectura();
 				return null;
 			}
 		} catch (Exception e) {
 			//Excepcion
-			
+			System.err.println("Error de lectura: ha ocurrido un error al momento de obtener el archivo desde la direccion indicada, Direccion Provista: '"+DIRECCION_ARCHIVO+"' <Err:Primera Fase>");
 			//Abortar conexion
 			CerrarLectura();
 			return null;
@@ -68,7 +68,7 @@ public class Conexion {
 				return Lector;
 			}else {
 				//Error
-				
+				System.err.println("Error de lectura: no se pudo definir el lector en base al archivo proporcionado <Err:Segunda Fase>");
 				//Abortar conexion
 				CerrarLectura();
 				return null;
@@ -76,7 +76,7 @@ public class Conexion {
 			
 		} catch (Exception e) {
 			//Excepcion
-			
+			System.err.println("Error de lectura: ha ocurrido un error al momento de establecer el lector <Err:Segunda Fase>");
 			//Abortar conexion
 			CerrarLectura();
 			return null;
@@ -84,7 +84,7 @@ public class Conexion {
 	}
 	
 	
-	//Metodo para tratar de establecer el flujo lector
+	//Metodo para tratar de establecer el flujo lector (Tercera Fase)
 	public BufferedReader DefinirFlujoLector(FileReader referencia) {
 		//Control de excepciones
 		try {
@@ -98,7 +98,7 @@ public class Conexion {
 				return FlujoLector;
 			}else {
 				//Error
-				
+				System.err.println("Error de lectura: no se pudo definir el flujo lector en base al lector proporcionado <Err:Tercera Fase>");
 				//Abortar conexion
 				CerrarLectura();
 				return null;
@@ -106,7 +106,7 @@ public class Conexion {
 			
 		} catch (Exception e) {
 			//Excepcion
-			
+			System.err.println("Error de lectura: ha ocurrido un error al momento de definir el flujo lector <Err:Tercera Fase>");
 			//Abortar conexion
 			CerrarLectura();
 			return null;
